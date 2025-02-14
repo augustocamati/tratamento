@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Beaker, Bell, FileBarChart, MapPin, Power, Pause } from "lucide-react"
+import {  MapPin, Power, Pause } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import Link from "next/link"
+
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { MenuOne } from "@/components/menu-one"
 

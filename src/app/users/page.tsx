@@ -6,7 +6,7 @@ import { MenuOne } from "@/components/menu-one"
 import {
   Table,
   TableBody,
-  TableCaption,
+
   TableCell,
   TableFooter,
   TableHead,

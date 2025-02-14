@@ -1,8 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Card, CardDescription,CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Component } from "@/components/user-stats";
-import { Beaker, BeakerIcon, Bell, BellIcon, FileBarChart } from "lucide-react";
 
 export function HomeScreen() {
   const waterStatus = "Própria para consumo"
