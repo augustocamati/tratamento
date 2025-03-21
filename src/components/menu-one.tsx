@@ -1,65 +1,49 @@
-"use client"
-
-import { Home, Users, Settings, FileBarChart, ShoppingCart } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Home, Users, Settings, Activity, FileBarChart, Droplets } from "lucide-react"
 
 export function MenuOne() {
-  const pathname = usePathname()
-
   return (
-    <nav className="space-y-2 p-4">
-      <Button
-        asChild
-        variant={pathname === "/" ? "default" : "ghost"}
-        className="w-full justify-start"
+    <nav className="mt-5 px-2">
+      <div className="hidden md:flex items-center px-4 mb-6">
+        <Droplets className="h-8 w-8 text-blue-500" />
+        <span className="ml-2 text-xl font-semibold">AquaSystem</span>
+      </div>
+
+      <Link
+        href="/"
+        className="group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150"
       >
-        <Link href="/">
-          <Home className="mr-2 h-4 w-4" />
-          Home
-        </Link>
-      </Button>
-      <Button
-        asChild
-        variant={pathname === "/users" ? "default" : "ghost"}
-        className="w-full justify-start"
+        <Home className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" />
+        Início
+      </Link>
+      <Link
+        href="/monitoramento"
+        className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150"
       >
-        <Link href="/users">
-          <Users className="mr-2 h-4 w-4" />
-          Funcionarios
-        </Link>
-      </Button>
-      <Button
-        asChild
-        variant={pathname === "/monitoramento" ? "default" : "ghost"}
-        className="w-full justify-start"
+        <Activity className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" />
+        Monitoramento
+      </Link>
+      <Link
+        href="/user"
+        className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150"
       >
-        <Link href="/monitoramento">
-          <FileBarChart className="mr-2 h-4 w-4" />
-          Monitoramento
-        </Link>
-      </Button>
-      <Button
-        asChild
-        variant={pathname === "/settings" ? "default" : "ghost"}
-        className="w-full justify-start"
+        <Users className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" />
+        Usuários
+      </Link>
+      <Link
+        href="/relatorios"
+        className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150"
       >
-        <Link href="/settings">
-          <Settings className="mr-2 h-4 w-4" />
-          Settings
-        </Link>
-      </Button>
-      <Button
-        asChild
-        variant={pathname === "/produtos" ? "default" : "destructive"}
-        className="w-full justify-start"
+        <FileBarChart className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" />
+        Relatórios
+      </Link>
+      <Link
+        href="/configuracoes"
+        className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150"
       >
-        <Link href="/settings">
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Produtos
-        </Link>
-      </Button>
+        <Settings className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150" />
+        Configurações
+      </Link>
     </nav>
   )
 }

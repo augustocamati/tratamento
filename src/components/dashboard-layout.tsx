@@ -2,9 +2,8 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Beaker, Bell, FileBarChart, Menu } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -15,79 +14,47 @@ export function DashboardLayout({ children, sidebar }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between p-4">
-            <h1 className="text-xl font-semibold">Dashboard</h1>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <Menu className="h-6 w-6" />
-            </Button>
-          </div>
-
-          {sidebar}
-        </div>
-        
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+      {/* Mobile sidebar toggle */}
+      <div className="md:hidden flex items-center p-4 bg-primary text-primary-foreground">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="text-primary-foreground"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+        <h1 className="ml-2 text-xl font-semibold">Sistema de Tratamento de Água</h1>
       </div>
+
+      {/* Mobile sidebar */}
+      <div
+        className={`
+        fixed inset-0 z-50 bg-black bg-opacity-50 md:hidden
+        ${sidebarOpen ? "block" : "hidden"}
+      `}
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      <aside
+        className={`
+        fixed top-0 left-0 z-50 w-64 h-full bg-white shadow-md transform transition-transform duration-300 ease-in-out
+        md:relative md:translate-x-0
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
+        <div className="flex justify-between items-center p-4 md:hidden">
+          <h2 className="text-lg font-semibold">Menu</h2>
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
+        {sidebar}
+      </aside>
 
       {/* Main content */}
-      <div className="flex-1 overflow-x-hidden overflow-y-auto">
-        <nav className="bg-primary text-primary-foreground shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex ">
-                <div className="flex-shrink-0 flex items-center">
-                  <Beaker className="h-8 w-8" />
-                  <span className="ml-2 text-xl font-semibold">
-                    Sistema de Tratamento de Água
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-primary-foreground"
-                >
-                  <Bell className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="ml-2 text-primary-foreground"
-                >
-                  <FileBarChart className="h-5 w-5" />
-                </Button>
-                <Link href="/" className="ml-4">
-                  <Button variant="secondary">Produtos</Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-        <div className="container mx-auto p-6">
-          <Button
-            variant="outline"
-            size="icon"
-            className="mb-4 md:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-
-          {children}
-        </div>
-      </div>
+      <main className="flex-1 overflow-x-hidden overflow-y-auto">{children}</main>
     </div>
   )
 }
