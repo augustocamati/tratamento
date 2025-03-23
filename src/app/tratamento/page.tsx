@@ -204,7 +204,7 @@ export default function TratamentoPage() {
                   </div>
                   <div className="text-3xl font-bold text-primary mb-1 text-center">2.1 <span className="text-sm">NTU</span></div>
                   <div className="text-xs text-gray-500 text-center">Padrão: 5.0 NTU</div>
-                </div>\
+                </div>
                 
                 <div className="bg-gray-50 rounded-xl p-4">
                   <div className="flex items-center justify-between mb-2">
