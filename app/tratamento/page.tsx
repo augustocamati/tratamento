@@ -1,250 +1,194 @@
+"use client"
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect, useState } from "react"
 
 export default function TratamentoPage() {
+   const API_URL = process.env.NEXT_PUBLIC_API_URL 
+    const [data, setData] = useState(null)
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+         
+          const res = await fetch(`${API_URL}/sensors/data/latest`) // ajuste para sua API
+          const json = await res.json()
+          console.log('json', json)
+          setData(json)
+        } catch (err) {
+          console.error("Erro ao buscar dados da API:", err)
+        }
+      }
+  
+      fetchData()
+      const interval = setInterval(fetchData, 5000)
+      return () => clearInterval(interval)
+    }, [])
+  
+    if (!data) return <div className="p-6">Carregando...</div>
+  
   return (
     <div className="min-h-screen bg-background">
-      <PageHeader 
-        title="Tratamento de Água" 
+      <PageHeader
+        title="Tratamento de Água"
         description="Monitore e controle os processos de tratamento de água"
         icon="cycle"
       />
-      
+
       <main className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <Card className="bg-white">
             <CardContent className="p-5">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-gray-500 text-sm">Água Tratada Hoje</h3>
-                  <p className="text-3xl font-bold text-primary">185<span className="text-lg ml-1">m³</span></p>
+                  <h3 className="text-gray-500 text-sm">Vazão Total</h3>
+                  <p className="text-3xl font-bold text-primary">
+                    {data.totalFlow}
+                    <span className="text-lg ml-1">L</span>
+                  </p>
                 </div>
                 <div className="w-10 h-10 bg-primary-100 rounded-md flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary">water_full</span>
+                  <span className="material-symbols-outlined text-primary">
+                    water_full
+                  </span>
                 </div>
-              </div>
-              <div className="flex items-center text-xs text-success">
-                <span className="material-symbols-outlined text-sm mr-1">trending_up</span>
-                <span>+8% em relação a ontem</span>
               </div>
             </CardContent>
           </Card>
-          
-          <Card className="bg-white">
-            <CardContent className="p-5">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-gray-500 text-sm">Eficiência Média</h3>
-                  <p className="text-3xl font-bold text-primary">94.2<span className="text-lg ml-1">%</span></p>
-                </div>
-                <div className="w-10 h-10 bg-primary-100 rounded-md flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary">speed</span>
-                </div>
-              </div>
-              <div className="flex items-center text-xs text-success">
-                <span className="material-symbols-outlined text-sm mr-1">trending_up</span>
-                <span>+2.5% em relação ao mês anterior</span>
-              </div>
-            </CardContent>
-          </Card>
-          
+
           <Card className="bg-white">
             <CardContent className="p-5">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-gray-500 text-sm">Estações Ativas</h3>
-                  <p className="text-3xl font-bold text-primary">8<span className="text-lg ml-1">/10</span></p>
+                  <p className="text-3xl font-bold text-primary">
+                    1<span className="text-lg ml-1">/1</span>
+                  </p>
                 </div>
                 <div className="w-10 h-10 bg-primary-100 rounded-md flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary">location_on</span>
+                  <span className="material-symbols-outlined text-primary">
+                    location_on
+                  </span>
                 </div>
               </div>
               <div className="flex items-center text-xs text-warning">
-                <span className="material-symbols-outlined text-sm mr-1">info</span>
+                <span className="material-symbols-outlined text-sm mr-1">
+                  info
+                </span>
                 <span>2 estações em manutenção</span>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-white">
             <CardContent className="p-5">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-gray-500 text-sm">Produtos Químicos</h3>
-                  <p className="text-3xl font-bold text-primary">82<span className="text-lg ml-1">%</span></p>
+                  <h3 className="text-gray-500 text-sm">Última Atualização</h3>
+                  <p className="text-2xl font-bold text-primary">
+                    {new Date(data.timestamp).toLocaleDateString("pt-BR")}
+                  </p>
+                  <h3 className="text-gray-500 text-sm">
+                    {new Date(data.timestamp).toLocaleTimeString("pt-BR")}
+                  </h3>
                 </div>
                 <div className="w-10 h-10 bg-primary-100 rounded-md flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary">science</span>
+                  <span className="material-symbols-outlined text-primary">
+                    schedule
+                  </span>
                 </div>
-              </div>
-              <div className="flex items-center text-xs text-warning">
-                <span className="material-symbols-outlined text-sm mr-1">warning</span>
-                <span>Estoque para 18 dias</span>
               </div>
             </CardContent>
           </Card>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
           <Card className="bg-white">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-gray-800">Estado do Sistema</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-5">
-                <div>
-                  <div className="flex justify-between items-center text-sm mb-1">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">filter_alt</span>
-                      <span className="text-gray-700">Tratamento Primário</span>
-                    </div>
-                    <span className="text-primary font-medium">98%</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full progress-bar-gradient rounded-full" style={{width: '98%'}}></div>
-                  </div>
-                  <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">Última manutenção: 05/06/2023</span>
-                    <span className="text-xs text-success">Operacional</span>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between items-center text-sm mb-1">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">filter_alt</span>
-                      <span className="text-gray-700">Filtração</span>
-                    </div>
-                    <span className="text-primary font-medium">92%</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full progress-bar-gradient rounded-full" style={{width: '92%'}}></div>
-                  </div>
-                  <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">Última manutenção: 12/06/2023</span>
-                    <span className="text-xs text-success">Operacional</span>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between items-center text-sm mb-1">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">sanitizer</span>
-                      <span className="text-gray-700">Desinfecção</span>
-                    </div>
-                    <span className="text-primary font-medium">95%</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full progress-bar-gradient rounded-full" style={{width: '95%'}}></div>
-                  </div>
-                  <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">Última manutenção: 10/06/2023</span>
-                    <span className="text-xs text-success">Operacional</span>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between items-center text-sm mb-1">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">water_full</span>
-                      <span className="text-gray-700">Armazenamento</span>
-                    </div>
-                    <span className="text-primary font-medium">76%</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full progress-bar-gradient rounded-full" style={{width: '76%'}}></div>
-                  </div>
-                  <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">Última manutenção: 01/06/2023</span>
-                    <span className="text-xs text-success">Operacional</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold text-gray-800">Qualidade da Água</CardTitle>
+              <CardTitle className="text-lg font-bold text-gray-800">
+                Qualidade da Água
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">ph</span>
-                      <span className="text-gray-700 text-sm">pH</span>
-                    </div>
-                    <span className="text-xs text-success bg-success/10 px-2 py-1 rounded-full">Normal</span>
-                  </div>
-                  <div className="text-3xl font-bold text-primary mb-1 text-center">7.2</div>
-                  <div className="text-xs text-gray-500 text-center">Padrão: 6.5 - 8.5</div>
-                </div>
-                
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">science</span>
-                      <span className="text-gray-700 text-sm">Cloro</span>
-                    </div>
-                    <span className="text-xs text-success bg-success/10 px-2 py-1 rounded-full">Normal</span>
-                  </div>
-                  <div className="text-3xl font-bold text-primary mb-1 text-center">0.8 <span className="text-sm">mg/L</span></div>
-                  <div className="text-xs text-gray-500 text-center">Padrão: 0.2 - 2.0 mg/L</div>
-                </div>
-                
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">opacity</span>
-                      <span className="text-gray-700 text-sm">Turbidez</span>
-                    </div>
-                    <span className="text-xs text-success bg-success/10 px-2 py-1 rounded-full">Normal</span>
-                  </div>
-                  <div className="text-3xl font-bold text-primary mb-1 text-center">2.1 <span className="text-sm">NTU</span></div>
-                  <div className="text-xs text-gray-500 text-center">Padrão: 5.0 NTU</div>
-                </div>
-                
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <span className="material-symbols-outlined text-primary mr-2">water</span>
-                      <span className="text-gray-700 text-sm">Coliformes</span>
-                    </div>
-                    <span className="text-xs text-success bg-success/10 px-2 py-1 rounded-full">Normal</span>
-                  </div>
-                  <div className="text-3xl font-bold text-primary mb-1 text-center">0 <span className="text-sm">UFC</span></div>
-                  <div className="text-xs text-gray-500 text-center">Padrão: Ausente</div>
-                </div>
+                <Parametro
+                  icon="turb"
+                  label="Turbidez"
+                  valor={data.turbidity}
+                  unidade={data.turbidityUnit}
+                  status={data.turbidityStatus}
+                  padrao="0.5 - 1.0"
+                />
+
+                <Parametro
+                  icon="ph"
+                  label="ph"
+                  valor={7.2} // Simulado por enquanto
+                  unidade=""
+                  status="NORMAL"
+                />
+
+                <Parametro
+                  icon="science"
+                  label="TDS"
+                  valor={data.tds}
+                  unidade={data.tdsUnit}
+                  status={data.tdsStatus}
+                  padrao="0.5 - 1.0"
+                />
+
+                <Parametro
+                  icon="water"
+                  label="Fluxo"
+                  valor={data.flowRate}
+                  unidade={data.flowRateUnit}
+                  status={data.flowRateStatus}
+                />
               </div>
-              
+
               <div className="flex items-center bg-success/10 rounded-lg p-3">
-                <span className="material-symbols-outlined text-success mr-3">check_circle</span>
+                <span className="material-symbols-outlined text-success mr-3">
+                  location_on
+                </span>
                 <div>
-                  <p className="text-gray-800 text-sm font-medium">Água dentro dos Padrões de Potabilidade</p>
-                  <p className="text-xs text-gray-500">Última verificação: hoje às 14:30</p>
+                  <p className="text-gray-800 text-sm font-medium">
+                    {data.station.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {data.station.location}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-        
+
         <Card className="w-full bg-white">
           <CardContent className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold text-gray-800">Manutenções Programadas</h3>
+              <h3 className="text-lg font-bold text-gray-800">
+                Manutenções Programadas
+              </h3>
               <div className="flex space-x-2">
                 <Button className="flex items-center px-3 py-1.5 rounded-lg text-sm">
-                  <span className="material-symbols-outlined text-sm mr-1">add</span>
+                  <span className="material-symbols-outlined text-sm mr-1">
+                    add
+                  </span>
                   Agendar
                 </Button>
-                <Button variant="outline" size="icon" className="p-1.5 rounded-lg">
-                  <span className="material-symbols-outlined text-sm">calendar_month</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="p-1.5 rounded-lg"
+                >
+                  <span className="material-symbols-outlined text-sm">
+                    calendar_month
+                  </span>
                 </Button>
               </div>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full border-separate border-spacing-y-2">
                 <thead>
@@ -259,14 +203,20 @@ export default function TratamentoPage() {
                 </thead>
                 <tbody>
                   <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">15/07/2023</td>
+                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">
+                      15/07/2023
+                    </td>
                     <td className="py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                          <span className="material-symbols-outlined text-sm text-primary">water_drop</span>
+                          <span className="material-symbols-outlined text-sm text-primary">
+                            water_drop
+                          </span>
                         </div>
                         <div>
-                          <p className="text-gray-800 text-sm font-medium">Estação Central</p>
+                          <p className="text-gray-800 text-sm font-medium">
+                            Estação Central
+                          </p>
                           <p className="text-xs text-gray-500">São Paulo, SP</p>
                         </div>
                       </div>
@@ -280,25 +230,43 @@ export default function TratamentoPage() {
                     </td>
                     <td className="py-3 rounded-r-lg">
                       <div className="flex justify-end space-x-1">
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">edit</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            edit
+                          </span>
                         </Button>
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">delete</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            delete
+                          </span>
                         </Button>
                       </div>
                     </td>
                   </tr>
-                  
+
                   <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">22/07/2023</td>
+                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">
+                      22/07/2023
+                    </td>
                     <td className="py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                          <span className="material-symbols-outlined text-sm text-primary">water_drop</span>
+                          <span className="material-symbols-outlined text-sm text-primary">
+                            water_drop
+                          </span>
                         </div>
                         <div>
-                          <p className="text-gray-800 text-sm font-medium">Estação Norte</p>
+                          <p className="text-gray-800 text-sm font-medium">
+                            Estação Norte
+                          </p>
                           <p className="text-xs text-gray-500">Campinas, SP</p>
                         </div>
                       </div>
@@ -312,25 +280,43 @@ export default function TratamentoPage() {
                     </td>
                     <td className="py-3 rounded-r-lg">
                       <div className="flex justify-end space-x-1">
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">edit</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            edit
+                          </span>
                         </Button>
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">delete</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            delete
+                          </span>
                         </Button>
                       </div>
                     </td>
                   </tr>
-                  
+
                   <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">10/07/2023</td>
+                    <td className="py-3 pl-4 rounded-l-lg text-gray-600">
+                      10/07/2023
+                    </td>
                     <td className="py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                          <span className="material-symbols-outlined text-sm text-primary">water_drop</span>
+                          <span className="material-symbols-outlined text-sm text-primary">
+                            water_drop
+                          </span>
                         </div>
                         <div>
-                          <p className="text-gray-800 text-sm font-medium">Estação Sul</p>
+                          <p className="text-gray-800 text-sm font-medium">
+                            Estação Sul
+                          </p>
                           <p className="text-xs text-gray-500">Santos, SP</p>
                         </div>
                       </div>
@@ -344,11 +330,23 @@ export default function TratamentoPage() {
                     </td>
                     <td className="py-3 rounded-r-lg">
                       <div className="flex justify-end space-x-1">
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">visibility</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            visibility
+                          </span>
                         </Button>
-                        <Button variant="ghost" size="sm" className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors">
-                          <span className="material-symbols-outlined text-sm text-gray-600">download</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm text-gray-600">
+                            download
+                          </span>
                         </Button>
                       </div>
                     </td>
@@ -362,4 +360,39 @@ export default function TratamentoPage() {
     </div>
   )
 }
+
+
+
+function Parametro({icon, label, valor, unidade, status,padrao }) {
+  const statusColor =
+    {
+      NORMAL: "text-success bg-success/10",
+      WARNING: "text-warning bg-warning/10",
+      DANGER: "text-destructive bg-destructive/10",
+      CRITICAL: "text-destructive bg-destructive/10",
+    }[status] || "text-muted"
+
+  return (
+    <div className="bg-gray-50 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center">
+          <span className="material-symbols-outlined text-primary mr-2">
+            {icon}
+          </span>
+          <span className="text-gray-700 text-sm">{label}</span>
+        </div>
+        <span className={`text-xs px-2 py-1 rounded-full ${statusColor}`}>
+          {status}
+        </span>
+      </div>
+      <div className="text-3xl font-bold text-primary mb-1 text-center">
+        {valor} <span className="text-sm">{unidade}</span>
+      </div>
+      <div className="text-xs text-gray-500 text-center">
+        Padrão: {padrao} {unidade}
+      </div>
+    </div>
+  )
+}
+
 
