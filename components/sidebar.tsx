@@ -18,8 +18,8 @@ export function Sidebar({ className }: SidebarProps) {
     { href: "/", label: "Visão Geral", icon: "dashboard" },
     { href: "/consumo", label: "Consumo", icon: "water_drop" },
     { href: "/tratamento", label: "Tratamento", icon: "cycle" },
-    { href: "/relatorios", label: "Relatórios", icon: "monitoring" },
     { href: "/cartoes", label: "Cartões", icon: "credit_card" },
+    // { href: "/relatorios", label: "Relatórios", icon: "monitoring" },
     { href: "/configuracoes", label: "Configurações", icon: "settings" },
   ]
 
