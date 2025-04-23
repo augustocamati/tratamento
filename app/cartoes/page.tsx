@@ -652,16 +652,16 @@ console.log('novoCartao', novoCartao)
                           <div className="flex items-center">
                             <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center mr-3">
                               <span className="material-symbols-outlined text-sm text-primary">
-                                {recarga.cartao.tipo === "Residencial"
+                                {recarga.cartao?.tipo === "Residencial"
                                   ? "person"
-                                  : recarga.tipo === "Comercial"
+                                  : recarga.cartao?.tipo === "Comercial"
                                   ? "apartment"
                                   : "factory"}
                               </span>
                             </div>
                             <div>
                               <p className="text-gray-800 text-sm font-medium">
-                                {recarga.cartao.proprietario}
+                                {recarga.cartao?.proprietario}
                               </p>
                               <p className="text-xs text-gray-500">
                                 {recarga.tipo}
